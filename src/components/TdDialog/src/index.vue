@@ -1,7 +1,7 @@
 <template>
   <teleport to="body">
     <article v-if="visible">
-      <section>
+      <section :class="animation_class">
         <header>
           <span>{{ title }}</span>
           <span @click="close" class="close">x</span>
@@ -20,15 +20,24 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, getCurrentInstance } from 'vue';
+import { computed, getCurrentInstance, ref } from 'vue';
 
 defineOptions({ name: 'TdDialog' });
 defineProps<{ visible: boolean; title?: string }>();
 
 const emits = defineEmits(['update:visible', 'close']);
 
+// 控制弹出框动画效果
+const animation_class = ref('show');
 function close() {
-  emits('update:visible', false);
+  animation_class.value = 'hide';
+
+  setTimeout(() => {
+    emits('update:visible', false);
+
+    // 离开动画结束后，恢复初始值
+    animation_class.value = 'show';
+  }, 300);
 }
 
 // 判断具名插槽footer是否存在
@@ -92,6 +101,25 @@ article {
 
   &:hover {
     background-color: #e8e8e8;
+  }
+}
+
+.show {
+  animation: show 0.3s ease-in-out;
+}
+.hide {
+  animation: hide 0.3s ease-in-out;
+}
+
+@keyframes show {
+  0% {
+    margin: -100% auto 0;
+  }
+}
+
+@keyframes hide {
+  100% {
+    margin: -100% auto 0;
   }
 }
 </style>

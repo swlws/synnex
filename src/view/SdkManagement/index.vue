@@ -68,6 +68,7 @@ const columns = reactive<Column[]>([
     format: (row) => {
       return h(Tags, {
         tags: row.tags,
+        filter: searchContent.value,
       });
     },
   },

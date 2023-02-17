@@ -1,13 +1,19 @@
 <template>
   <div class="tags">
-    <div v-for="item in list" :key="item"> {{ item }}</div>
+    <div
+      v-for="item in list"
+      :key="item"
+      :class="filter && item.includes(filter) ? 'hight-light' : ''"
+    >
+      {{ item }}
+    </div>
   </div>
 </template>
 
 <script lang="ts" setup>
 import { computed } from 'vue';
 
-const props = defineProps<{ tags?: string }>();
+const props = defineProps<{ tags?: string; filter?: string }>();
 
 const list = computed(() => {
   if (!props.tags) return [];
@@ -26,6 +32,10 @@ const list = computed(() => {
     background-color: #e8e8e8;
     color: #333;
     padding: 0 2px;
+
+    &.hight-light {
+      color: orange;
+    }
   }
 }
 </style>
